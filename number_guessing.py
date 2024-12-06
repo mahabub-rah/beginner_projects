@@ -1,28 +1,42 @@
 import random
-lowest_number = int(input('Write your lowest number '))
-highest_number = int(input('Write your highest number '))
+import time
 
-number = (random.randint(lowest_number, highest_number))
-print('You will get 7 Chances')
-i = 0
-guess_number = []
-game_over =  False
-while i<7:
-    guess = int(input('Write your number '))
-    i +=1
-    if guess == number:
-        game_over = True
-    elif guess > number:
-        print('Your Guess is very High')
-        guess_number.append(guess)
-    elif guess <number:
-        print('Your Guess is very low')
-        guess_number.append(guess)
-if game_over:
-     print('Congratulation! You win!.')
-else:
-    print('Game Over!---')
-print(f"Guess Number: " , end = '\n ')
-for n in guess_number:
-        print(f"{n}", end = ' ')
+# define decorators -- game
+def game(func):
+  def inner():
+    print("Guess Any Number. You have 5 Changes")
+    start_time = time.time()
+    a = func()
+    end_time = time.time()
+    print("Your Guess Number", a)
+    print(f"You take {round(end_time - start_time)} seconds")
+  return inner()
 
+# define the game
+@game
+def random_number():
+  i = 5
+  num =random.randint(1,100)
+  l1 =[]
+  while i > 0:
+  # for the correct input
+    try:
+      guess = int(input('Write your number: '))
+      i -=1
+      if guess < num:
+        print(f"You choose low Number. {i} {'attempt' if i <= 1 else 'attempts'} left.")
+        l1.append(guess)
+      elif guess>num:
+        print(f"You choose high Number. {i} {'attempt' if i <= 1 else 'attempts'} left.")
+        l1.append(guess)
+      else:
+        print('Congratulation! You win')
+        break
+        return l1
+  # for the incorrect input
+    except ValueError:
+      print('Please write the correct number')
+  # don't fill any above condition
+  else:
+      print('Loser! You lose')
+      return l1
